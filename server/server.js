@@ -7,6 +7,15 @@ import {
 } from "./handlers.js";
 
 const server = http.createServer((req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "OPTIONS, GET, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Origin, Content-Type, Accept");
+
+  if (req.method === "OPTIONS") {
+    res.end();
+    return;
+  }
+
   const regex = /(\/contacts)(?:\/(.+))?/g;
   const str = req.url;
   let m;

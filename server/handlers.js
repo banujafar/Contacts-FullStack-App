@@ -34,7 +34,6 @@ const getContacts = async (req, res, selectedId) => {
     const contacts = await getContactsFromDB();
     res.statusCode = 200;
     res.setHeader("Content-Type", JSON_CONTENT_TYPE);
-
     if (selectedId) {
       const contact = contacts.find((contact) => contact.id == selectedId);
       if (contact) {
@@ -51,17 +50,18 @@ const getContacts = async (req, res, selectedId) => {
 
 // Handle POST requests
 const postContact = async (req, res) => {
+  console.log(res)
   try {
     const contacts = await getContactsFromDB();
-
     if (
       req.headers["content-type"] === JSON_CONTENT_TYPE &&
       req.url === "/contacts"
     ) {
       let newContact = "";
-
+      console.log(newContact);
       req.on("data", (chunk) => {
-        newContact = JSON.parse(chunk.toString());
+        newContact =JSON.parse(chunk.toString());
+        console.log((newContact));
       });
 
       req.on("end", async () => {
@@ -128,4 +128,15 @@ const deleteContact = async (req, res, selectedId) => {
   }
 };
 
+//PATCH
+// contacts = contacts.map((contact) => {
+//   if (contact.id == selectedId) {
+//     Object.keys(editedContact).map(keyContact=>{
+//       contact[keyContact]=editedContact[keyContact]
+
+//       return contact
+//     })
+//   }
+//   return contact;
+// });
 export { getContacts, postContact, updateContact, deleteContact };
