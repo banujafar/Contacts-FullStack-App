@@ -3,7 +3,7 @@ import ContactList from "./components/ContactList";
 import { AddContact } from "./components/AddContat";
 
 interface ICONTACTS {
-  id: number;
+  id: string;
   fullname: string;
   job: string;
   email: string;
@@ -62,27 +62,19 @@ function App() {
       } else {
         setContacts((prevContacts) => [...prevContacts, values]);
       }
-
-      setEditedContact({
-        id: 0,
-        fullname: '',
-        email: '',
-        job: '',
-        phone: '',
-        img: ''
-      }); // Clear editedContact after submitting
+      setEditedContact(undefined);
       console.log('Response data:', response);
     } catch (error) {
       console.error('Fetch error:', error);
     }
   };
 
-  const handleEdit = (contactID?: number) => {
-    const edited = contacts.find((contact) => contact.id === contactID);
+  const handleEdit = (contactID?: string) => {
+    const edited = contacts.find((contact) => contact.id == contactID);
     setEditedContact(edited);
   };
 
-  const handleDelete = async (contactID: number) => {
+  const handleDelete = async (contactID: string) => {
     try {
       await fetch(`http://localhost:3000/contacts/${contactID}`, {
         method: 'DELETE',
@@ -94,8 +86,9 @@ function App() {
           if (!response.ok) {
             throw new Error(`Request failed with status: ${response.status}`);
           }
-          const filteredContacts = contacts.filter((contact) => contact.id !== contactID)
+          const filteredContacts = contacts.filter((contact) => contact.id != contactID)
           setContacts(filteredContacts)
+          setEditedContact(undefined);
         })
 
     } catch (error) {

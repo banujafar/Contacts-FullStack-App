@@ -1,8 +1,9 @@
 import { Formik, Form, Field } from 'formik';
 import { useEffect, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 interface MyFormValues {
-    id: number;
+    id: string;
     fullname: string;
     job: string;
     email: string;
@@ -17,7 +18,7 @@ interface IProps {
 
 export const AddContact = ({ editedContact, onSend }: IProps) => {
     const [initialValues, setInitialValues] = useState<MyFormValues>(editedContact || {
-        id: 0,
+        id: uuidv4(),
         fullname: '',
         job: '',
         email: '',
@@ -32,7 +33,7 @@ export const AddContact = ({ editedContact, onSend }: IProps) => {
         else {
             setInitialValues(
                 {
-                    id: 0,
+                    id: uuidv4(),
                     fullname: '',
                     job: '',
                     email: '',
@@ -53,8 +54,6 @@ export const AddContact = ({ editedContact, onSend }: IProps) => {
                 initialValues={initialValues}
                 enableReinitialize={true}
                 onSubmit={(values, actions) => {
-                    console.log({ values, actions });
-                    alert(JSON.stringify(values, null, 2));
                     actions.setSubmitting(false);
                     onSend(values);
 
