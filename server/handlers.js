@@ -114,8 +114,8 @@ const updateContact = async (req, res, selectedId) => {
 const deleteContact = async (req, res, selectedId) => {
   try {
     let contacts = await getContactsFromDB();
-
-    if (!isNaN(selectedId)) {
+console.log(selectedId)
+    if (selectedId) {
       contacts = contacts.filter((contact) => contact.id != selectedId);
       await writeContactsToDB(contacts);
       res.statusCode = 200;

@@ -24,6 +24,7 @@ const server = http.createServer((req, res) => {
   if (m !== null) {
     const selectedId = m[2];
     if (m[1] === "/contacts") {
+      console.log(selectedId)
       switch (req.method) {
         case "GET":
           return getContacts(req, res, selectedId);

@@ -1,6 +1,6 @@
 import ContactItem from "./ContactItem"
 interface ICONTACTS {
-  id: number,
+  id: string,
   fullname: string,
   job: string,
   email: string,
@@ -10,8 +10,8 @@ interface ICONTACTS {
 
 interface IContactListProps {
   contacts: ICONTACTS[],
-  onEdit: (contactID?: number) => void,
-  onDelete: (contactID: number) => void,
+  onEdit: (contactID?: string) => void,
+  onDelete: (contactID: string) => void,
 }
 
 const ContactList = ({ contacts, onEdit, onDelete }: IContactListProps) => {
