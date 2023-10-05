@@ -18,7 +18,7 @@ function App() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/contacts");
+      const response = await axios.get("https://contacts-app-service.onrender.com/contacts");
       setContacts(response.data);
     } catch (error) {
       console.error("Axios error:", error);
@@ -32,8 +32,8 @@ function App() {
   const sendData = async (values: ICONTACTS) => {
     try {
       const url = editedContact
-        ? `http://localhost:3000/contacts/${editedContact.id}`
-        : "http://localhost:3000/contacts";
+        ? `https://contacts-app-service.onrender.com/contacts/${editedContact.id}`
+        : "https://contacts-app-service.onrender.com/contacts";
 
       const method = editedContact ? "PUT" : "POST";
 
@@ -71,7 +71,7 @@ function App() {
 
   const handleDelete = async (contactID: string) => {
     try {
-      await axios.delete(`http://localhost:3000/contacts/${contactID}`);
+      await axios.delete(`https://contacts-app-service.onrender.com/contacts/${contactID}`);
       const filteredContacts = contacts.filter((contact) => contact.id !== contactID);
       setContacts(filteredContacts);
       setEditedContact(undefined);
