@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ContactList from "./components/ContactList";
 import { AddContact } from "./components/AddContat";
+import axios from "axios"; // Import Axios
 
 interface ICONTACTS {
   id: string;
@@ -17,14 +18,10 @@ function App() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('http://localhost:3000/contacts');
-      if (!response.ok) {
-        throw new Error(`Request failed with status: ${response.status}`);
-      }
-      const data = await response.json();
-      setContacts(data);
+      const response = await axios.get("http://localhost:3000/contacts");
+      setContacts(response.data);
     } catch (error) {
-      console.error('Fetch error:', error);
+      console.error("Axios error:", error);
     }
   };
 
@@ -34,26 +31,23 @@ function App() {
 
   const sendData = async (values: ICONTACTS) => {
     try {
-      const options = {
-        method: editedContact ? 'PUT' : 'POST',
-        body: JSON.stringify(values),
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      };
-
       const url = editedContact
         ? `http://localhost:3000/contacts/${editedContact.id}`
-        : 'http://localhost:3000/contacts';
+        : "http://localhost:3000/contacts";
 
-      const response = await fetch(url, options);
+      const method = editedContact ? "PUT" : "POST";
 
-      if (!response.ok) {
-        throw new Error(`Request failed with status: ${response.status}`);
-      }
+      const response = await axios({
+        method: method,
+        url: url,
+        data: values,
+        headers: {
+          "Content-Type": "text/plain",
+        },
+      });
 
       if (editedContact) {
+        console.log(editedContact)
         setContacts((prevContacts) =>
           prevContacts.map((contact) =>
             contact.id === editedContact.id ? values : contact
@@ -63,38 +57,27 @@ function App() {
         setContacts((prevContacts) => [...prevContacts, values]);
       }
       setEditedContact(undefined);
-      console.log('Response data:', response);
+      console.log("Axios response:", response);
     } catch (error) {
-      console.error('Fetch error:', error);
+      console.error("Axios error:", error);
     }
   };
 
   const handleEdit = (contactID?: string) => {
+    console.log(contactID)
     const edited = contacts.find((contact) => contact.id == contactID);
     setEditedContact(edited);
   };
 
   const handleDelete = async (contactID: string) => {
     try {
-      await fetch(`http://localhost:3000/contacts/${contactID}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`Request failed with status: ${response.status}`);
-          }
-          const filteredContacts = contacts.filter((contact) => contact.id != contactID)
-          setContacts(filteredContacts)
-          setEditedContact(undefined);
-        })
-
+      await axios.delete(`http://localhost:3000/contacts/${contactID}`);
+      const filteredContacts = contacts.filter((contact) => contact.id !== contactID);
+      setContacts(filteredContacts);
+      setEditedContact(undefined);
     } catch (error) {
-      console.log(error)
+      console.error("Axios error:", error);
     }
-
   };
 
   return (

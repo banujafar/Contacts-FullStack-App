@@ -8,12 +8,11 @@ import {
 
 const server = http.createServer((req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "OPTIONS, GET, POST, PUT, DELETE");
   res.setHeader("Access-Control-Allow-Headers", "Origin, Content-Type, Accept");
+  res.setHeader("Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, OPTIONS");
 
   if (req.method === "OPTIONS") {
     res.end();
-    return;
   }
 
   const regex = /(\/contacts)(?:\/(.+))?/g;
@@ -24,7 +23,7 @@ const server = http.createServer((req, res) => {
   if (m !== null) {
     const selectedId = m[2];
     if (m[1] === "/contacts") {
-      console.log(selectedId)
+      console.log(selectedId);
       switch (req.method) {
         case "GET":
           return getContacts(req, res, selectedId);
@@ -36,6 +35,9 @@ const server = http.createServer((req, res) => {
           return deleteContact(req, res, selectedId);
       }
     }
+  } else {
+    res.writeHead(404);
+    res.end("Not found");
   }
 });
 

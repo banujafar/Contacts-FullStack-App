@@ -1,7 +1,7 @@
 import fs from "fs/promises";
 
 const CONTACTS_FILE_PATH = "server/db/contacts.json";
-const JSON_CONTENT_TYPE = "application/json";
+const JSON_CONTENT_TYPE = "text/plain";
 
 // Handling errors
 function handleError(res, statusCode, message) {
@@ -50,7 +50,7 @@ const getContacts = async (req, res, selectedId) => {
 
 // Handle POST requests
 const postContact = async (req, res) => {
-  console.log(res)
+  console.log(res);
   try {
     const contacts = await getContactsFromDB();
     if (
@@ -58,10 +58,9 @@ const postContact = async (req, res) => {
       req.url === "/contacts"
     ) {
       let newContact = "";
-      console.log(newContact);
       req.on("data", (chunk) => {
-        newContact =JSON.parse(chunk.toString());
-        console.log((newContact));
+        newContact = JSON.parse(chunk.toString());
+        console.log(newContact);
       });
 
       req.on("end", async () => {
@@ -114,11 +113,10 @@ const updateContact = async (req, res, selectedId) => {
 const deleteContact = async (req, res, selectedId) => {
   try {
     let contacts = await getContactsFromDB();
-console.log(selectedId)
     if (selectedId) {
       contacts = contacts.filter((contact) => contact.id != selectedId);
       await writeContactsToDB(contacts);
-      res.statusCode = 200;
+      res.statusCode = 204;
       res.end("Contact has been deleted successfully");
     } else {
       handleError(res, 400, "Invalid ID format");

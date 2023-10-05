@@ -18,7 +18,7 @@ interface IProps {
 
 export const AddContact = ({ editedContact, onSend }: IProps) => {
     const [initialValues, setInitialValues] = useState<MyFormValues>(editedContact || {
-        id: uuidv4(),
+        id: '',
         fullname: '',
         job: '',
         email: '',
